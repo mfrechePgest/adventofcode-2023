@@ -46,7 +46,7 @@ public class Day05 extends AbstractMultiStepDay<Long, Long> {
     }
 
     private List<Long> mySeeds = new ArrayList<>();
-    private List<AlmanacMap> maps = new ArrayList<>();
+    private final List<AlmanacMap> maps = new ArrayList<>();
 
 
     public void readFile() throws IOException {
@@ -66,19 +66,19 @@ public class Day05 extends AbstractMultiStepDay<Long, Long> {
                 } else if (!Character.isDigit(line.charAt(0))) {
                     currentMap = new AlmanacMap(line.split(" ")[0]);
                 } else {
-                    String[] splitted = line.split(" ");
-                    Long destinationStart = Long.parseLong(splitted[0]);
-                    Long sourceStart = Long.parseLong(splitted[1]);
-                    Long range = Long.parseLong(splitted[2]);
+                    assert currentMap != null;
+                    String[] split = line.split(" ");
+                    Long destinationStart = Long.parseLong(split[0]);
+                    Long sourceStart = Long.parseLong(split[1]);
+                    Long range = Long.parseLong(split[2]);
                     Function<Long, Long> previousFunc = currentMap.function;
-                    Function<Long, Long> newFunc = i -> {
+                    currentMap.function = i -> {
                         if (i >= sourceStart && i < sourceStart + range) {
                             return i + (destinationStart - sourceStart);
                         } else {
                             return previousFunc.apply(i);
                         }
                     };
-                    currentMap.function = newFunc;
                 }
                 line = br.readLine();
             }
