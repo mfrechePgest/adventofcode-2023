@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 public class Day05 extends AbstractMultiStepDay<Long, Long> {
@@ -22,20 +23,29 @@ public class Day05 extends AbstractMultiStepDay<Long, Long> {
 
     public Long resultStep1() {
         Stream<Long> stream = mySeeds.stream();
-        for (AlmanacMap map : maps ) {
+        for (AlmanacMap map : maps) {
             stream = stream
-                    .peek(l -> System.out.println("Applying " + map.label + " on " + l))
-                    .map(map.function)
-                    .peek(l -> System.out.println("Result of " + map.label + " = " + l));
+                    .map(map.function);
         }
         return stream.min(Long::compare).orElse(-1L);
     }
 
     public Long resultStep2() {
-        return 0L;
+        Stream<Long> stream = Stream.empty();
+        for (int i = 0; i < mySeeds.size(); i += 2) {
+            stream = Stream.concat(
+                    stream,
+                    LongStream.range(mySeeds.get(i), mySeeds.get(i) + mySeeds.get(i + 1)).boxed()
+            );
+        }
+        for (AlmanacMap map : maps) {
+            stream = stream
+                    .map(map.function);
+        }
+        return stream.min(Long::compare).orElse(-1L);
     }
 
-    private Set<Long> mySeeds = new HashSet<>();
+    private List<Long> mySeeds = new ArrayList<>();
     private List<AlmanacMap> maps = new ArrayList<>();
 
 
@@ -48,9 +58,9 @@ public class Day05 extends AbstractMultiStepDay<Long, Long> {
                     mySeeds = Arrays.stream(line.split(" "))
                             .skip(1)
                             .map(Long::parseLong)
-                            .collect(Collectors.toSet());
+                            .collect(Collectors.toList());
                 } else if (line.isEmpty() || line.isBlank()) {
-                    if( currentMap != null) {
+                    if (currentMap != null) {
                         maps.add(currentMap);
                     }
                 } else if (!Character.isDigit(line.charAt(0))) {
