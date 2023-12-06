@@ -22,7 +22,7 @@ public class Day05 extends AbstractMultiStepDay<Long, Long> {
     }
 
     public Long resultStep1() {
-        Stream<Long> stream = mySeeds.stream();
+        Stream<Long> stream = mySeeds.stream().parallel();
         for (AlmanacMap map : maps) {
             stream = stream
                     .map(map.function);
@@ -42,7 +42,7 @@ public class Day05 extends AbstractMultiStepDay<Long, Long> {
             stream = stream
                     .map(map.function);
         }
-        return stream.min(Long::compare).orElse(-1L);
+        return stream.parallel().min(Long::compare).orElse(-1L);
     }
 
     private List<Long> mySeeds = new ArrayList<>();
