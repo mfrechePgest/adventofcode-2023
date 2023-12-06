@@ -40,17 +40,18 @@ public class Day06 extends AbstractMultiStepDay<Long, Long> {
     private long waysToWin(Race race) {
         // (time - x) * x > distance
         // x*time - x² > distance
-        // -x² + time*x - distance = 0
+        // -x² + time*x - distance > 0
         // x = (-time +- sqrt(time² - 4 * distance)) / ( -2 )
         // x = time/2 +- (1/2 * sqrt(time² - 4distance))
-        double bound1 = race.getTime() / 2d + ( 0.5d * Math.sqrt( race.getTime() * race.getTime() - 4 * race.getDistance() ));
-        double bound2 = race.getTime() / 2d - ( 0.5d * Math.sqrt( race.getTime() * race.getTime() - 4 * race.getDistance() ));
-        System.out.println( bound2 + " < x < " + bound1 );
-        bound1 = bound1 % 1 == 0 ? bound1 - 1 : Math.floor(bound1);
-        bound2 = bound2 % 1 == 0 ? bound2 + 1 : Math.ceil(bound2);
-        System.out.println( bound2 + " < x < " + bound1 );
-        long waysToWin = (long) (bound1 - bound2 + 1);
-        System.out.println( "Ways to win = " + waysToWin );
+        double upperBound = race.getTime() / 2d + ( 0.5d * Math.sqrt( race.getTime() * race.getTime() - 4 * race.getDistance() ));
+        double lowerBound = race.getTime() / 2d - ( 0.5d * Math.sqrt( race.getTime() * race.getTime() - 4 * race.getDistance() ));
+        System.out.println( lowerBound + " < x < " + upperBound );
+        upperBound = upperBound % 1 == 0 ? upperBound - 1 : Math.floor(upperBound);
+        lowerBound = lowerBound % 1 == 0 ? lowerBound + 1 : Math.ceil(lowerBound);
+        System.out.println( lowerBound + " < x < " + upperBound );
+        long waysToWin = (long) (upperBound - lowerBound + 1);
+        System.out.println( "Ways to win = " +
+                ConsoleColors.coloredString(String.valueOf(waysToWin), ConsoleColors.PURPLE) );
         return waysToWin;
     }
 
