@@ -31,18 +31,23 @@ public class Day05 extends AbstractMultiStepDay<Long, Long> {
     }
 
     public Long resultStep2() {
-        Stream<Long> stream = Stream.empty();
+        Stream<Range> stream = Stream.empty();
         for (int i = 0; i < mySeeds.size(); i += 2) {
             stream = Stream.concat(
                     stream,
-                    LongStream.range(mySeeds.get(i), mySeeds.get(i) + mySeeds.get(i + 1)).boxed()
+                    Stream.of(new Range(mySeeds.get(i), mySeeds.get(i) + mySeeds.get(i + 1)))
             );
         }
         for (AlmanacMap map : maps) {
             stream = stream
-                    .map(map.function);
+                    .peek(r -> System.err.println("Mapping range " + r.begin() + " " + r.end() + " " + map.label))
+                    .flatMap(map.rangeFunction);
         }
-        return stream.parallel().min(Long::compare).orElse(-1L);
+        return stream//.parallel()
+                .peek(r -> System.err.println("Range " + r.begin() + " " + r.end()))
+                .map(Range::begin)
+                .min(Long::compare)
+                .orElse(-1L);
     }
 
     private List<Long> mySeeds = new ArrayList<>();
@@ -71,12 +76,28 @@ public class Day05 extends AbstractMultiStepDay<Long, Long> {
                     Long destinationStart = Long.parseLong(split[0]);
                     Long sourceStart = Long.parseLong(split[1]);
                     Long range = Long.parseLong(split[2]);
+                    Function<Long, Optional<Long>> innerFunc = i -> {
+                        if (i >= sourceStart && i < sourceStart + range) {
+                            return Optional.of(i + (destinationStart - sourceStart));
+                        } else {
+                            return Optional.empty();
+                        }
+                    };
                     Function<Long, Long> previousFunc = currentMap.function;
                     currentMap.function = i -> {
-                        if (i >= sourceStart && i < sourceStart + range) {
-                            return i + (destinationStart - sourceStart);
+                        return innerFunc.apply(i).orElseGet(() -> previousFunc.apply(i));
+                    };
+                    Range source = new Range(sourceStart, sourceStart + range - 1);
+                    Function<Range, Stream<Range>> previousRangeFunc = currentMap.rangeFunction;
+                    currentMap.rangeFunction = r -> {
+                        if (r.overlap(source)) {
+                            return r.splitOverlaps(source)
+                                    .map(r2 -> new Range(
+                                                innerFunc.apply(r2.begin()).orElse(r2.begin()),
+                                                innerFunc.apply(r2.end()).orElse(r2.end())
+                                    ));
                         } else {
-                            return previousFunc.apply(i);
+                            return previousRangeFunc.apply(r);
                         }
                     };
                 }
