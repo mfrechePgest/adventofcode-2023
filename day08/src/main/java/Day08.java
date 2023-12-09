@@ -89,10 +89,12 @@ public class Day08 extends AbstractMultiStepDay<Long, Long> {
     }
 
     /**
-     * shouldn't be working out of the box...
-     * works because :
-     *   - there actually ARE cycles
-     *   - input **A is actually the perfect beginning of a cycle, each time
+     * shouldn't be working out of the box...<br/>
+     * works because :<br/>
+     *   - there actually ARE cycles<br/>
+     *   - input **A is actually the perfect beginning of a cycle, each time<br/>
+     * @see <a href="https://www.reddit.com/r/adventofcode/comments/18e6vdf/2023_day_8_part_2_an_explanation_for_why_the/?utm_source=share&utm_medium=web2x&context=3">Explanation "why it works here"</a>
+     * @see <a href="https://www.baeldung.com/java-least-common-multiple">Baeldung copypasta</a>
      */
     public static long lcm(long number1, long number2) {
         if (number1 == 0 || number2 == 0) {
