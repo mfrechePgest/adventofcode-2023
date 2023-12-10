@@ -47,7 +47,7 @@ public class Ground extends AbstractCoord {
                 boolean shouldProcess = alreadySeen.add(current);
                 if (shouldProcess) {
                     Node<Ground> finalCurrent = current;
-                    System.out.print("Processing... " + alreadySeen.size() + " seen , " + queue.size() + " in queue\r");
+//                    System.out.print("Processing... " + alreadySeen.size() + " seen , " + queue.size() + " in queue\r");
                     current.content()
                             .streamNeighbours(ground, pipeMap, maxX, maxY, alreadySeen)
                             .filter(Objects::nonNull)
