@@ -87,5 +87,7 @@ day*/bin/
 day*/build/
 template/build/
 template/bin/
+tests/bin/
+tests/build/
 
 token.txt
