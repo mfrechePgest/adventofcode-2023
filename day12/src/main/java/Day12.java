@@ -29,13 +29,10 @@ public class Day12 extends AbstractMultiStepDay<Long, Long> {
     }
 
     public Long resultStep2() {
-        final AtomicInteger count = new AtomicInteger();
         return hotSprings.stream()
                 .parallel()
                 .map(HotSpring::unfold)
                 .mapToLong(this::countArrangements)
-                .peek(c -> count.incrementAndGet())
-                .peek(c -> System.out.print("Treated " + count.get() + "/" + hotSprings.size() + " elements\r"))
                 .sum();
     }
 

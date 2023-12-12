@@ -27,7 +27,6 @@ public class Day10 extends AbstractMultiStepDay<Long, Long> {
         for (Ground g1 : ground.values()) {
             if (g1.isInsideLoop() == null) {
                 g1.computeInsideLoop(ground, map, maxX, maxY);
-                debug(map, ground, maxX, maxY, null);
             }
         }
         long result = ground.values().stream()
