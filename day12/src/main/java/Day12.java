@@ -1,9 +1,8 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.LongStream;
 
 public class Day12 extends AbstractMultiStepDay<Long, Long> {
 
@@ -30,50 +29,73 @@ public class Day12 extends AbstractMultiStepDay<Long, Long> {
     }
 
     public Long resultStep2() {
+        final AtomicInteger count = new AtomicInteger();
         return hotSprings.stream()
                 .parallel()
                 .map(HotSpring::unfold)
                 .mapToLong(this::countArrangements)
+                .peek(c -> count.incrementAndGet())
+                .peek(c -> System.out.print("Treated " + count.get() + "/" + hotSprings.size() + " elements\r"))
                 .sum();
     }
 
 
     long countArrangements(HotSpring hotSpring) {
-        List<Integer> jokerIndices = IntStream.range(0, hotSpring.input().length())
-                .filter(i -> hotSpring.input().charAt(i) == '?')
-                .boxed()
-                .toList();
-        return LongStream.range(0, (long) Math.pow(2, jokerIndices.size()))
-                .parallel()
-                .mapToObj(l -> new long[]{l})
-                .map(BitSet::valueOf)
-                .map(bs -> {
-                    StringBuilder inner = new StringBuilder(hotSpring.input());
-                    bs.stream().forEach(i -> inner.setCharAt(jokerIndices.get(i) ,'#'));
-                    return inner;
-                })
-                .map(StringBuilder::toString)
-                .filter(hs -> isValid(hs, hotSpring.rules()))
-                .count();
+        return solve(hotSpring);
     }
 
-    private boolean isValid(String hs, List<Integer> rules) {
-        String stringRepresentation =
-                hs.replaceAll("\\?", ".") // at this point all ? become .
-                        .replaceAll("\\.+", ".");
-        List<String> split = Arrays.stream(stringRepresentation.split("\\."))
-                .filter(s -> !s.isEmpty())
-                .toList();
-        if (split.size() == rules.size()) {
-            for (int i = 0 ; i < split.size() ; i++ ) {
-                if (split.get(i).length() != rules.get(i)) {
-                    return false;
-                }
-            }
-            return true;
+    private long solve(String input, List<Integer> rules, Map<HotSpring, Long> cache) {
+        HotSpring hotSpring = new HotSpring(input, rules);
+        if (cache.containsKey(hotSpring)) {
+            return cache.get(hotSpring);
         }
-        return false;
+
+        long result = 0;
+        if (input.isBlank()) {
+            if (rules.isEmpty()) {
+                // reach the end, every rule fits
+                result = 1;
+            }
+        } else {
+            result = switch (input.charAt(0)) {
+                case '.' -> solve(input.substring(1), rules, cache);
+                case '?' ->
+                        solve("." + input.substring(1), rules, cache) + solve("#" + input.substring(1), rules, cache);
+                default -> solveDamagedSpring(input, rules, cache);
+            };
+        }
+
+        cache.put(hotSpring, result);
+        return result;
     }
+
+    public long solveDamagedSpring(String input, List<Integer> rules, Map<HotSpring, Long> cache) {
+        if (rules.isEmpty()) {
+            return 0;
+        } else {
+            Integer damagedGroupRule = rules.getFirst();
+            if (damagedGroupRule <= input.length() &&
+                    input.chars().limit(damagedGroupRule).allMatch(c -> c == '#' || c =='?')) {
+                if (input.length() == damagedGroupRule) {
+                    // end of input : ok if it was the last group
+                    return rules.size() == 1 ? 1 : 0;
+                } else if (input.charAt(damagedGroupRule) == '#') {
+                    // can't have another # after a group
+                    return 0;
+                } else {
+                    return solve(input.substring(damagedGroupRule + 1), rules.subList(1, rules.size()), cache);
+                }
+            } else {
+                return 0;
+            }
+        }
+    }
+
+
+    private long solve(HotSpring hotSpring) {
+        return solve(hotSpring.input(), hotSpring.rules(), new HashMap<>());
+    }
+
 
     public void readFile() throws IOException {
         try (BufferedReader br = getReader(this.getClass())) {
