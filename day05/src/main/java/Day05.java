@@ -40,11 +40,9 @@ public class Day05 extends AbstractMultiStepDay<Long, Long> {
         }
         for (AlmanacMap map : maps) {
             stream = stream
-                    .peek(r -> System.err.println("Mapping range " + r.begin() + " " + r.end() + " " + map.label))
                     .flatMap(map.rangeFunction);
         }
-        return stream//.parallel()
-                .peek(r -> System.err.println("Range " + r.begin() + " " + r.end()))
+        return stream.parallel()
                 .map(Range::begin)
                 .min(Long::compare)
                 .orElse(-1L);
@@ -91,11 +89,21 @@ public class Day05 extends AbstractMultiStepDay<Long, Long> {
                     Function<Range, Stream<Range>> previousRangeFunc = currentMap.rangeFunction;
                     currentMap.rangeFunction = r -> {
                         if (r.overlap(source)) {
+                            // if ranges overlaps
                             return r.splitOverlaps(source)
-                                    .map(r2 -> new Range(
-                                                innerFunc.apply(r2.begin()).orElse(r2.begin()),
-                                                innerFunc.apply(r2.end()).orElse(r2.end())
-                                    ));
+                                    // we split ranges if needed
+                                    .flatMap(r2 -> {
+                                        if ( r2.overlap(source)) {
+                                            // range actually overlapping applies functions
+                                            return Stream.of(new Range(
+                                                    innerFunc.apply(r2.begin()).orElse(r2.begin()),
+                                                    innerFunc.apply(r2.end()).orElse(r2.end())
+                                            ));
+                                        } else {
+                                            // other ranges eventually pass to other functions
+                                            return previousRangeFunc.apply(r2);
+                                        }
+                                    });
                         } else {
                             return previousRangeFunc.apply(r);
                         }
