@@ -17,6 +17,7 @@ test {
 dependencies {
     implementation(parent)
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    testImplementation(project(":tests"))
 }
 
 application {
