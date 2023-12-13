@@ -34,7 +34,16 @@ public class Day13 extends AbstractMultiStepDay<Long, Long> {
     }
 
     public Long resultStep2() {
-        return 0L;
+        return mirrors.stream()
+                .mapToLong(mirrorMap ->
+                        mirrorMap.findHorizontalSmudgeNewSymmetry()
+                                .stream().map(i -> 100 * i)
+                                .findFirst()
+                                .orElseGet(() ->
+                                        mirrorMap.findVerticalSmudgeNewSymmetry()
+                                                .orElseThrow(() -> new NoSuchElementException("Can't find symmetry in : \n" + mirrorMap)))
+                )
+                .sum();
     }
 
     List<MirrorMap> mirrors = new ArrayList<>();
