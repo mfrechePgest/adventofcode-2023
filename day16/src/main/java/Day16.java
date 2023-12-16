@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class Day16 extends AbstractMultiStepDay<Long, Long> {
@@ -48,27 +49,25 @@ public class Day16 extends AbstractMultiStepDay<Long, Long> {
     }
 
     public Long resultStep2() {
-        List<Step> initialSteps = new ArrayList<>();
-        for (int y = 0; y < mapHeight; y++) {
-            for (int x = 0; x < mapWidth; x++) {
-                if ((y != 0 || x != 0) && (y != mapWidth - 1 || x != mapWidth - 1)) {
-                    Direction dir = null;
-                    if (x == 0) {
-                        dir = Direction.EAST;
-                    } else if (y == 0) {
-                        dir = Direction.SOUTH;
-                    } else if (y == mapWidth - 1) {
-                        dir = Direction.NORTH;
-                    } else {
-                        dir = Direction.WEST;
-                    }
-                    Step s = new Step(new Point(x, y), dir);
-                    initialSteps.add(s);
-                }
-            }
-        }
-
-        return initialSteps.stream()
+        return IntStream.range(0, mapHeight)
+                .boxed()
+                .flatMap(y -> IntStream.range(0, mapWidth)
+                        .parallel()
+                        .filter(x -> (y != 0 || x != 0) && (y != mapWidth - 1 || x != mapWidth - 1))
+                        .mapToObj(x -> {
+                            Point p = new Point(x,y);
+                            if (x == 0) {
+                                return new Step(p, Direction.EAST);
+                            } else if (y == 0) {
+                                return new Step(p, Direction.SOUTH);
+                            } else if (y == mapWidth - 1) {
+                                return new Step(p, Direction.NORTH);
+                            } else {
+                                return new Step(p,Direction.WEST);
+                            }
+                        })
+                )
+                .parallel()
                 .mapToLong(this::countEnergizedPoints)
                 .max()
                 .orElse(0);
