@@ -86,13 +86,9 @@ public class Day14 extends AbstractMultiStepDay<Long, Long> {
         debug(copyRockMap, "INITIAL");
         for (long i = 0; i < FULLRUN_LIMIT; i++) {
             previousRockMaps.add(new HashMap<>(copyRockMap));
-            System.err.print("Running ... " + i + " / 1000000000 NORTH\r");
             load = tiltPlatform(copyRockMap, Direction.NORTH);
-            System.err.print("Running ... " + i + " / 1000000000 WEST\r");
             load = tiltPlatform(copyRockMap, Direction.WEST);
-            System.err.print("Running ... " + i + " / 1000000000 SOUTH\r");
             load = tiltPlatform(copyRockMap, Direction.SOUTH);
-            System.err.print("Running ... " + i + " / 1000000000 EAST\r");
             load = tiltPlatform(copyRockMap, Direction.EAST);
             if (!cycleReached && previousRockMaps.contains(copyRockMap)) {
                 long cycleLength = i - (previousRockMaps.indexOf(copyRockMap)) + 1;
