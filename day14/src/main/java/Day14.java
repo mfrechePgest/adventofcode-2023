@@ -26,10 +26,8 @@ public class Day14 extends AbstractMultiStepDay<Long, Long> {
     }
 
     public Long resultStep1() {
-        long load = 0;
         HashMap<Point, RoundedRock> copyRockMap = new HashMap<>(rockMap);
-        load = tiltPlatform(copyRockMap, Direction.NORTH);
-        return load;
+        return tiltPlatform(copyRockMap, Direction.NORTH);
     }
 
     private long tiltPlatform(Map<Point, RoundedRock> copyRockMap, Direction direction) {
@@ -76,7 +74,7 @@ public class Day14 extends AbstractMultiStepDay<Long, Long> {
         if (rock != null) {
             RoundedRock rockRolled = rock.roll(direction, copyRockMap, obstacles,
                     mapWidth, mapHeight);
-            load += mapHeight - rockRolled.point().y();
+            load += (long) (mapHeight - rockRolled.point().y());
         }
         return load;
     }
@@ -89,9 +87,9 @@ public class Day14 extends AbstractMultiStepDay<Long, Long> {
         debug(copyRockMap, "INITIAL");
         for (long i = 0; i < FULLRUN_LIMIT; i++) {
             previousRockMaps.add(new HashMap<>(copyRockMap));
-            load = tiltPlatform(copyRockMap, Direction.NORTH);
-            load = tiltPlatform(copyRockMap, Direction.WEST);
-            load = tiltPlatform(copyRockMap, Direction.SOUTH);
+            tiltPlatform(copyRockMap, Direction.NORTH);
+            tiltPlatform(copyRockMap, Direction.WEST);
+            tiltPlatform(copyRockMap, Direction.SOUTH);
             load = tiltPlatform(copyRockMap, Direction.EAST);
             if (!cycleReached && previousRockMaps.contains(copyRockMap)) {
                 long cycleLength = i - (previousRockMaps.indexOf(copyRockMap)) + 1;

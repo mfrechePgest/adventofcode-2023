@@ -49,9 +49,9 @@ public enum Mirror {
         }
     };
 
-    private char c;
+    private final char c;
 
-    private Mirror(char c) {
+    Mirror(char c) {
         this.c = c;
     }
 

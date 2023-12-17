@@ -50,6 +50,7 @@ public class Pipe extends AbstractCoord {
 
         // Counting junk pipes as ground (useful for step2)
         Set<Point> loop = new HashSet<>();
+        assert current != null;
         loop.add(current.content().getCoord());
         List<Node<Pipe>> listBranches = current.content()
                 .getNeighbours(map)

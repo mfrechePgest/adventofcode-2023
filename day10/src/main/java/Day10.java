@@ -89,7 +89,6 @@ public class Day10 extends AbstractMultiStepDay<Long, Long> {
                     char c = line.charAt(i);
                     if (c == '.') {
                         ground.put(p, new Ground(p));
-                        continue;
                     } else {
                         Pipe pipe = new Pipe(p, c);
                         if (c == 'S') {

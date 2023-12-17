@@ -41,7 +41,7 @@ public class Ground extends AbstractCoord {
         Queue<Node<Ground>> queue = new LinkedList<>();
         Set<Node<Ground>> alreadySeen = new HashSet<>();
         queue.add(new Node<>(null, this, 0));
-        Node<Ground> current = null;
+        Node<Ground> current;
         Boolean initialIsInLoop = computeInsideLoop(maxX, maxY);
         AtomicBoolean insideLoop = new AtomicBoolean(initialIsInLoop == null || initialIsInLoop);
         while (!queue.isEmpty()) {
@@ -52,7 +52,7 @@ public class Ground extends AbstractCoord {
                     Node<Ground> finalCurrent = current;
 //                    System.out.print("Processing... " + alreadySeen.size() + " seen , " + queue.size() + " in queue\r");
                     current.content()
-                            .streamNeighbours(ground, pipeMap, maxX, maxY, alreadySeen)
+                            .streamNeighbours(ground, pipeMap, maxX, maxY)
                             .filter(Objects::nonNull)
                             .map(pipe -> new Node<>(finalCurrent, pipe, 0))
                             .filter(node -> !alreadySeen.contains(node))
@@ -70,8 +70,7 @@ public class Ground extends AbstractCoord {
     }
 
     private Stream<Ground> streamNeighbours(Map<Point, Ground> ground, Map<Point, Pipe> pipeMap,
-                                            int maxX, int maxY,
-                                            Set<Node<Ground>> alreadySeen) {
+                                            int maxX, int maxY) {
         Stream<Ground> stream = Arrays.stream(Direction.values())
                 .flatMap(d -> { // getting all pipes neighbours...
                     return getFakeGroundFuite(ground, pipeMap, d);

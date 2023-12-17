@@ -91,7 +91,7 @@ public class Day16 extends AbstractMultiStepDay<Long, Long> {
                     if (steps.size() > 1) {
                         c = ConsoleColors.coloredString("#", ConsoleColors.RED);
                     } else if (steps.size() == 1) {
-                        c = ConsoleColors.coloredString(steps.get(0).dir().toChar(), ConsoleColors.RED);
+                        c = ConsoleColors.coloredString(steps.getFirst().dir().toChar(), ConsoleColors.RED);
                     } else {
                         c = ".";
                     }

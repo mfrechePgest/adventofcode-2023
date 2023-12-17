@@ -56,7 +56,7 @@ public class Day17 extends AbstractMultiStepDay<Long, Long> {
         return computeResult(true);
     }
 
-    private Map<Point, CityBlock> lavaLossMap = new HashMap<>();
+    private final Map<Point, CityBlock> lavaLossMap = new HashMap<>();
     private int mapWidth;
     private int mapHeight;
 
