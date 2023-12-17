@@ -1,3 +1,5 @@
+package mf.map;
+
 public enum Direction {
     NORTH('^') {
         @Override

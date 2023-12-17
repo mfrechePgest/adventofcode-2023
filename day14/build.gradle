@@ -16,6 +16,7 @@ test {
 
 dependencies {
     implementation(parent)
+    implementation(project(":utils"))
     testImplementation(project(":tests"))
 }
 

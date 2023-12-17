@@ -1,3 +1,5 @@
+import mf.map.Point;
+
 public class CityBlock {
 
     private Point point;

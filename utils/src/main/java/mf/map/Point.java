@@ -1,3 +1,5 @@
+package mf.map;
+
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -20,7 +22,9 @@ public final class Point {
             pointCache.put(x, col);
             return p;
         } else {
-            return pointCache.get(x).computeIfAbsent(y, col -> new Point(x, col));
+            synchronized (pointCache) {
+                return pointCache.get(x).computeIfAbsent(y, col -> new Point(x, col));
+            }
         }
     }
 

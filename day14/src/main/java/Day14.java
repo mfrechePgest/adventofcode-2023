@@ -1,3 +1,6 @@
+import mf.map.Direction;
+import mf.map.Point;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,7 +38,7 @@ public class Day14 extends AbstractMultiStepDay<Long, Long> {
             case NORTH -> {
                 for (int y = 0; y < mapHeight; y++) {
                     for (int x = 0; x < mapWidth; x++) {
-                        RoundedRock rock = copyRockMap.get(new Point(x, y));
+                        RoundedRock rock = copyRockMap.get(Point.of(x, y));
                         load = rollRock(copyRockMap, direction, rock, load);
                     }
                 }
@@ -43,7 +46,7 @@ public class Day14 extends AbstractMultiStepDay<Long, Long> {
             case SOUTH -> {
                 for (int y = mapHeight - 1; y >= 0; y--) {
                     for (int x = 0; x < mapWidth; x++) {
-                        RoundedRock rock = copyRockMap.get(new Point(x, y));
+                        RoundedRock rock = copyRockMap.get(Point.of(x, y));
                         load = rollRock(copyRockMap, direction, rock, load);
                     }
                 }
@@ -51,7 +54,7 @@ public class Day14 extends AbstractMultiStepDay<Long, Long> {
             case EAST -> {
                 for (int x = mapWidth - 1; x >= 0; x--) {
                     for (int y = 0; y < mapHeight; y++) {
-                        RoundedRock rock = copyRockMap.get(new Point(x, y));
+                        RoundedRock rock = copyRockMap.get(Point.of(x, y));
                         load = rollRock(copyRockMap, direction, rock, load);
                     }
                 }
@@ -59,7 +62,7 @@ public class Day14 extends AbstractMultiStepDay<Long, Long> {
             case WEST -> {
                 for (int x = 0; x < mapWidth; x++) {
                     for (int y = 0; y < mapHeight; y++) {
-                        RoundedRock rock = copyRockMap.get(new Point(x, y));
+                        RoundedRock rock = copyRockMap.get(Point.of(x, y));
                         load = rollRock(copyRockMap, direction, rock, load);
                     }
                 }
@@ -106,7 +109,7 @@ public class Day14 extends AbstractMultiStepDay<Long, Long> {
         for (int y = 0; y < mapHeight; y++) {
             for (int x = 0; x < mapWidth; x++) {
                 String c;
-                Point point = new Point(x, y);
+                Point point = Point.of(x, y);
                 if (rockMap.containsKey(point)) {
                     c = ConsoleColors.coloredString("O", ConsoleColors.CYAN);
                 } else if (obstacles.containsKey(point)) {
@@ -132,7 +135,7 @@ public class Day14 extends AbstractMultiStepDay<Long, Long> {
             mapWidth = line.length();
             while (line != null) {
                 for (int i = 0; i < line.length(); i++) {
-                    Point p = new Point(i, idxLine);
+                    Point p = Point.of(i, idxLine);
                     switch (line.charAt(i)) {
                         case '#' -> obstacles.put(p, new SquaredRock(p));
                         case 'O' -> rockMap.put(p, new RoundedRock(p));

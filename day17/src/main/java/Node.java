@@ -1,7 +1,8 @@
+import mf.map.Direction;
+import mf.map.Point;
+
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 public final class Node {

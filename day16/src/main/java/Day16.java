@@ -1,3 +1,7 @@
+import mf.map.Direction;
+import mf.map.Point;
+import mf.map.Step;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.*;
@@ -21,7 +25,7 @@ public class Day16 extends AbstractMultiStepDay<Long, Long> {
     }
 
     public Long resultStep1() {
-        Point pos = new Point(0, 0);
+        Point pos = Point.of(0, 0);
         Direction dir = Direction.EAST;
         Step initialStep = new Step(pos, dir);
         return countEnergizedPoints(initialStep);
@@ -55,7 +59,7 @@ public class Day16 extends AbstractMultiStepDay<Long, Long> {
                         .parallel()
                         .filter(x -> (y != 0 || x != 0) && (y != mapWidth - 1 || x != mapWidth - 1))
                         .mapToObj(x -> {
-                            Point p = new Point(x,y);
+                            Point p = Point.of(x,y);
                             if (x == 0) {
                                 return new Step(p, Direction.EAST);
                             } else if (y == 0) {
@@ -78,7 +82,7 @@ public class Day16 extends AbstractMultiStepDay<Long, Long> {
         for (int y = 0; y < mapHeight; y++) {
             for (int x = 0; x < mapWidth; x++) {
                 String c;
-                Point point = new Point(x, y);
+                Point point = Point.of(x, y);
                 if (mirrorMap.containsKey(point)) {
                     c = ConsoleColors.coloredString(mirrorMap.get(point).getChar(), ConsoleColors.CYAN);
                 } else {
@@ -112,7 +116,7 @@ public class Day16 extends AbstractMultiStepDay<Long, Long> {
                 for (int x = 0; x < line.length(); x++) {
                     char c = line.charAt(x);
                     if (c != '.') {
-                        mirrorMap.put(new Point(x, currentIdx), Mirror.fromChar(c));
+                        mirrorMap.put(Point.of(x, currentIdx), Mirror.fromChar(c));
                     }
                 }
 

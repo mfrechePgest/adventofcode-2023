@@ -1,3 +1,6 @@
+import mf.map.Direction;
+import mf.map.Point;
+
 import java.util.Map;
 
 public record RoundedRock(Point point) {

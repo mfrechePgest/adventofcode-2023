@@ -1,3 +1,6 @@
+import mf.map.Direction;
+import mf.map.Point;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.*;
