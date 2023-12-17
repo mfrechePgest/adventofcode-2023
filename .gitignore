@@ -89,5 +89,7 @@ template/build/
 template/bin/
 tests/bin/
 tests/build/
+utils/bin/
+utils/build/
 
 token.txt
