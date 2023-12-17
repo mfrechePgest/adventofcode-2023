@@ -1,3 +1,5 @@
+import mf.map.Point;
+
 public class Galaxy {
     private final Point p;
 

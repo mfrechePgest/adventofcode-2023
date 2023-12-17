@@ -1,3 +1,5 @@
+import mf.map.Point;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,7 +39,7 @@ public class Day11 extends AbstractMultiStepDay<Long, Long> {
                         .filter(p2 -> !p2.equals(p1))
                         .filter(p2 -> !mapDist.containsKey(p2) || !mapDist.get(p2).containsKey(p1))
                         .map(p2 -> {
-                            long dist = p2.manhanttanDist(p1);
+                            long dist = (long) p2.manhattanDist(p1);
                             mapDist.computeIfAbsent(p1, k -> new HashMap<>()).put(p2, dist);
                             mapDist.computeIfAbsent(p2, k -> new HashMap<>()).put(p1, dist);
                             return dist;
@@ -63,7 +65,7 @@ public class Day11 extends AbstractMultiStepDay<Long, Long> {
                 for (int i = 0; i < line.length(); i++) {
                     char c = line.charAt(i);
                     if (c == '#') {
-                        Point key = new Point(i, lineIndex);
+                        Point key = Point.of(i,  lineIndex);
                         Galaxy galaxy = new Galaxy(key);
                         mapGalaxies.put(key, galaxy);
                     }
@@ -87,9 +89,9 @@ public class Day11 extends AbstractMultiStepDay<Long, Long> {
         Map<Point, Galaxy> result = galaxies.values()
                 .stream()
                 .map(e -> {
-                    long previousX = e.getPoint().x();
+                    double previousX = e.getPoint().x();
                     return new Galaxy(
-                            new Point(
+                            Point.of(
                                     ((delta - 1) * expandedColumns.stream().filter(x -> x < previousX).count()) + previousX,
                                     e.getPoint().y()
                             )
@@ -108,9 +110,9 @@ public class Day11 extends AbstractMultiStepDay<Long, Long> {
         result = result.values()
                 .stream()
                 .map(e -> {
-                    long previousY = e.getPoint().y();
+                    double previousY = e.getPoint().y();
                     return new Galaxy(
-                            new Point(
+                            Point.of(
                                     e.getPoint().x()
                                     ,
                                     ((delta - 1) * expandedRows.stream().filter(y -> y < previousY).count() + previousY)
