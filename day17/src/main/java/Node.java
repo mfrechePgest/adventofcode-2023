@@ -19,7 +19,7 @@ public final class Node {
     }
 
     public Stream<Node> neighbours(int mapWidth, int mapHeight, Map<Point, CityBlock> mapHeatLoss, boolean step2) {
-        Stream<Node> stream = cityBlock.getPoint().neighbours(mapWidth, mapHeight)
+        Stream<Node> stream = cityBlock.getPoint().neighbours(mapWidth, mapHeight, 1)
                 .filter(s -> s.dir() != direction.reversed()) // can't move backward
                 .map(s -> new Node(mapHeatLoss.get(s.pos()),
                         s.dir(),

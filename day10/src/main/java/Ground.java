@@ -1,3 +1,6 @@
+import mf.map.Direction;
+import mf.map.Point;
+
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
@@ -80,7 +83,7 @@ public class Ground extends AbstractCoord {
         if (insideLoop == null) {
             stream = Stream.concat(
                     Arrays.stream(Direction.values())
-                            .map(d -> d.move(getCoord()).floor())
+                            .map(d -> d.move(getCoord(), 0.5d).floor())
                             .map(ground::get)
                     ,
                     stream
@@ -92,7 +95,7 @@ public class Ground extends AbstractCoord {
     }
 
     private Stream<Ground> getFakeGroundFuite(Map<Point, Ground> ground, Map<Point, Pipe> pipeMap, Direction d) {
-        Point dest = d.move(getCoord()).floor();
+        Point dest = d.move(getCoord(), 0.5d).floor();
         Pipe pipe = pipeMap.get(dest);
         if (pipe != null && pipe.getConnectedTo().size() < 4 &&
                 (pipe.getConnectedTo().contains(d) ||
@@ -102,27 +105,27 @@ public class Ground extends AbstractCoord {
             if (connections.contains(d.left())) {
                 return Stream.of(
                         switch (d) {
-                            case NORTH -> new Ground(new Point(pipe.getCoord().x() + 0.5d, pipe.getCoord().y()), true);
-                            case SOUTH -> new Ground(new Point(pipe.getCoord().x() - 0.5d, pipe.getCoord().y()), true);
-                            case EAST -> new Ground(new Point(pipe.getCoord().x(), pipe.getCoord().y() + 0.5d), true);
-                            case WEST -> new Ground(new Point(pipe.getCoord().x(), pipe.getCoord().y() - 0.5d), true);
+                            case NORTH -> new Ground(Point.of(pipe.getCoord().x() + 0.5d, pipe.getCoord().y()), true);
+                            case SOUTH -> new Ground(Point.of(pipe.getCoord().x() - 0.5d, pipe.getCoord().y()), true);
+                            case EAST -> new Ground(Point.of(pipe.getCoord().x(), pipe.getCoord().y() + 0.5d), true);
+                            case WEST -> new Ground(Point.of(pipe.getCoord().x(), pipe.getCoord().y() - 0.5d), true);
                         });
             } else if (connections.contains(d.right())) {
                 return Stream.of(
                         switch (d) {
-                            case NORTH -> new Ground(new Point(pipe.getCoord().x() - 0.5d, pipe.getCoord().y()), true);
-                            case SOUTH -> new Ground(new Point(pipe.getCoord().x() + 0.5d, pipe.getCoord().y()), true);
-                            case EAST -> new Ground(new Point(pipe.getCoord().x(), pipe.getCoord().y() - 0.5d), true);
-                            case WEST -> new Ground(new Point(pipe.getCoord().x(), pipe.getCoord().y() + 0.5d), true);
+                            case NORTH -> new Ground(Point.of(pipe.getCoord().x() - 0.5d, pipe.getCoord().y()), true);
+                            case SOUTH -> new Ground(Point.of(pipe.getCoord().x() + 0.5d, pipe.getCoord().y()), true);
+                            case EAST -> new Ground(Point.of(pipe.getCoord().x(), pipe.getCoord().y() - 0.5d), true);
+                            case WEST -> new Ground(Point.of(pipe.getCoord().x(), pipe.getCoord().y() + 0.5d), true);
                         });
             } else {
                 return switch (d) {
                     case NORTH, SOUTH ->
-                            Stream.of(new Ground(new Point(pipe.getCoord().x() + 0.5d, pipe.getCoord().y()), true),
-                                    new Ground(new Point(pipe.getCoord().x() - 0.5d, pipe.getCoord().y()), true));
+                            Stream.of(new Ground(Point.of(pipe.getCoord().x() + 0.5d, pipe.getCoord().y()), true),
+                                    new Ground(Point.of(pipe.getCoord().x() - 0.5d, pipe.getCoord().y()), true));
                     case EAST, WEST ->
-                            Stream.of(new Ground(new Point(pipe.getCoord().x(), pipe.getCoord().y() + 0.5d), true)
-                                    , new Ground(new Point(pipe.getCoord().x(), pipe.getCoord().y() - 0.5d), true));
+                            Stream.of(new Ground(Point.of(pipe.getCoord().x(), pipe.getCoord().y() + 0.5d), true)
+                                    , new Ground(Point.of(pipe.getCoord().x(), pipe.getCoord().y() - 0.5d), true));
                 };
             }
         } else {

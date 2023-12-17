@@ -1,7 +1,14 @@
+import mf.map.Point;
+
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import mf.map.Direction;
+
+import static mf.map.Direction.*;
 
 public class Day10 extends AbstractMultiStepDay<Long, Long> {
 
@@ -43,7 +50,7 @@ public class Day10 extends AbstractMultiStepDay<Long, Long> {
         StringBuilder s = new StringBuilder();
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                Point p = new Point(x, y);
+                Point p = Point.of(x, y);
                 String debug;
                 String color = ConsoleColors.WHITE;
                 if (pipeMap.get(p) != null) debug = pipeMap.get(p).toDebugChar();
@@ -78,7 +85,7 @@ public class Day10 extends AbstractMultiStepDay<Long, Long> {
             int lineIndex = 0;
             while (line != null) {
                 for (int i = 0; i < line.length(); i++) {
-                    Point p = new Point(i, lineIndex);
+                    Point p = Point.of(i, lineIndex);
                     char c = line.charAt(i);
                     if (c == '.') {
                         ground.put(p, new Ground(p));
@@ -101,6 +108,33 @@ public class Day10 extends AbstractMultiStepDay<Long, Long> {
     private static void clearConsole() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
+    }
+
+    public static List<Direction> connectedDirectionsFromChar(char c) {
+        return switch (c) {
+            case '-' -> Arrays.asList(EAST, WEST);
+            case '|' -> Arrays.asList(NORTH, SOUTH);
+            case 'L' -> Arrays.asList(NORTH, EAST);
+            case 'J' -> Arrays.asList(NORTH, WEST);
+            case '7' -> Arrays.asList(WEST, SOUTH);
+            case 'F' -> Arrays.asList(SOUTH, EAST);
+            case '.' -> List.of();
+            case 'S' -> Arrays.asList(values());
+            default -> throw new IllegalArgumentException();
+        };
+    }
+
+    public static String inputCharToDebugChar(char c) {
+        return switch (c) {
+            case '-' -> "═";
+            case '|' -> "║";
+            case 'F' -> "╔";
+            case 'L' -> "╚";
+            case '7' -> "╗";
+            case 'J' -> "╝";
+            case 'S' -> "¤";
+            default -> throw new IllegalArgumentException();
+        };
     }
 
 

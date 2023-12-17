@@ -1,3 +1,6 @@
+import mf.map.Direction;
+import mf.map.Point;
+
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -8,8 +11,8 @@ public class Pipe extends AbstractCoord {
 
     public Pipe(Point p, char c) {
         super(p);
-        connectedTo = Direction.connectedDirectionsFromChar(c);
-        debugChar = Direction.inputCharToDebugChar(c);
+        connectedTo = Day10.connectedDirectionsFromChar(c);
+        debugChar = Day10.inputCharToDebugChar(c);
     }
 
     Stream<Pipe> getNeighbours(Map<Point, Pipe> map) {
@@ -18,7 +21,7 @@ public class Pipe extends AbstractCoord {
 
     Stream<Pipe> getNeighbours(Map<Point, Pipe> map, boolean checkReverseConnection) {
         return connectedTo.stream()
-                .map(d -> d.move(this.getCoord()))
+                .map(d -> d.move(this.getCoord(), 1d))
                 .map(map::get)
                 .filter(Objects::nonNull)
                 .filter(p -> !checkReverseConnection || p.getNeighbours(map, false)
@@ -56,7 +59,7 @@ public class Pipe extends AbstractCoord {
                 .toList();
         for (Node<Pipe> branch : listBranches) {
             Node<Pipe> branch2 = branch;
-            while(branch2 != null) {
+            while (branch2 != null) {
                 loop.add(branch2.content().getCoord());
                 branch2 = branch2.parent();
             }

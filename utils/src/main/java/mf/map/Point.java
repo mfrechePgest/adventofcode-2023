@@ -4,20 +4,20 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public final class Point {
-    private final int x;
-    private final int y;
+    private final double x;
+    private final double y;
 
-    private static final Map<Integer, Map<Integer,Point>> pointCache = new HashMap<>();
+    private static final Map<Double, Map<Double,Point>> pointCache = new HashMap<>();
 
-    private Point(int x, int y) {
+    private Point(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public static Point of(int x, int y) {
+    public static Point of(double x, double y) {
         if (!pointCache.containsKey(x)) {
             Point p = new Point(x,y);
-            Map<Integer, Point> col = new HashMap<>();
+            Map<Double, Point> col = new HashMap<>();
             col.put(y, p);
             pointCache.put(x, col);
             return p;
@@ -32,24 +32,30 @@ public final class Point {
         return x >= 0 && y >= 0 && x < mapWidth && y < mapHeight;
     }
 
-    public Stream<Step> neighbours(int mapWidth, int mapHeight) {
+    public Stream<Step> neighbours(int mapWidth, int mapHeight, double step) {
         return Stream.of(
-                new Step(Point.of(x - 1, y), Direction.WEST),
-                new Step(Point.of(x + 1, y), Direction.EAST),
-                new Step(Point.of(x, y - 1), Direction.NORTH),
-                new Step(Point.of(x, y + 1), Direction.SOUTH)
+                new Step(Point.of(x - step, y), Direction.WEST),
+                new Step(Point.of(x + step, y), Direction.EAST),
+                new Step(Point.of(x, y - step), Direction.NORTH),
+                new Step(Point.of(x, y + step), Direction.SOUTH)
         ).filter(s -> s.pos().isValid(mapWidth, mapHeight));
     }
 
-    public long manhattanDist(Point p1) {
+    public double manhattanDist(Point p1) {
         return Math.abs(p1.x() - this.x) + Math.abs(p1.y() - this.y);
     }
 
-    public int x() {
+
+    public Point floor() {
+        return new Point(Math.floor(x), Math.floor(y));
+    }
+    public Point ceil() { return new Point(Math.ceil(x), Math.ceil(y));}
+
+    public double x() {
         return x;
     }
 
-    public int y() {
+    public double y() {
         return y;
     }
 

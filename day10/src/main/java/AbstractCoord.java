@@ -1,3 +1,5 @@
+import mf.map.Point;
+
 public abstract class AbstractCoord {
 
     private final Point coord;

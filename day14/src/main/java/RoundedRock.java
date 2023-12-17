@@ -9,13 +9,13 @@ public record RoundedRock(Point point) {
                             Map<Point, RoundedRock> rocks,
                             Map<Point, SquaredRock> obstacles,
                             int mapWidth, int mapHeight) {
-        Point futurePos = direction.move(point);
+        Point futurePos = direction.move(point, 1);
         Point previousPoint = point;
         while (!rocks.containsKey(futurePos)
                 && !obstacles.containsKey(futurePos)
                 && futurePos.isValid(mapWidth, mapHeight)) {
             previousPoint = futurePos;
-            futurePos = direction.move(futurePos);
+            futurePos = direction.move(futurePos, 1);
         }
         rocks.remove(point);
         RoundedRock value = new RoundedRock(previousPoint);

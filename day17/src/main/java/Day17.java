@@ -27,7 +27,7 @@ public class Day17 extends AbstractMultiStepDay<Long, Long> {
     private long computeResult(boolean step2) {
         Point exit = Point.of(mapWidth - 1, mapHeight - 1);
         PriorityQueue<Node> queue = new PriorityQueue<>(Comparator
-                .comparingLong((Node node) -> node.cost() + node.point().manhattanDist(exit))
+                .comparingDouble((Node node) -> node.cost() + node.point().manhattanDist(exit))
                 .thenComparing(Objects::hashCode));
         System.out.println("Going to " + exit);
         queue.add(new Node(lavaLossMap.get(Point.of(0, 0)), Direction.EAST, 0, null));

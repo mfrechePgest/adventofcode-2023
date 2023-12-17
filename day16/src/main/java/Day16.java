@@ -5,7 +5,6 @@ import mf.map.Step;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -40,7 +39,7 @@ public class Day16 extends AbstractMultiStepDay<Long, Long> {
             setSteps.add(s);
 //            debug(setSteps, s.toString());
             Stream<Direction> dirs = mirrorMap.containsKey(s.pos()) ? mirrorMap.get(s.pos()).reflect(s.dir()) : Stream.of(s.dir());
-            dirs.map(d -> new Step(d.move(s.pos()), d))
+            dirs.map(d -> new Step(d.move(s.pos(), 1), d))
                     .filter(newStep -> newStep.pos().isValid(mapWidth, mapHeight))
                     .filter(newStep -> !setSteps.contains(newStep))
                     .forEach(steps::add);
