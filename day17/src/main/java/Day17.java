@@ -39,7 +39,7 @@ public class Day17 extends AbstractMultiStepDay<Long, Long> {
                     return currentNode.cost();
                 }
                 alreadyVisited.put(currentNode, currentNode.cost());
-                System.out.print("Running " + currentNode.point() + " - cost = " + currentNode.cost() + " - alreadyVisited = " + alreadyVisited.size() + " queue - " + queue.size() + "  \r");
+//                System.out.print("Running " + currentNode.point() + " - cost = " + currentNode.cost() + " - alreadyVisited = " + alreadyVisited.size() + " queue - " + queue.size() + "  \r");
                 currentNode.neighbours(mapWidth, mapHeight, lavaLossMap, step2)
                         .filter(n -> n.neverSeenOrBetterThanPrevious(alreadyVisited))
                         .forEach(queue::add);
