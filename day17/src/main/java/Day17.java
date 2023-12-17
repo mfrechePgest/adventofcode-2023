@@ -24,7 +24,7 @@ public class Day17 extends AbstractMultiStepDay<Long, Long> {
     private long computeResult(boolean step2) {
         Point exit = Point.of(mapWidth - 1, mapHeight - 1);
         PriorityQueue<Node> queue = new PriorityQueue<>(Comparator
-                .comparingLong(Node::cost)
+                .comparingLong((Node node) -> node.cost() + node.point().manhattanDist(exit))
                 .thenComparing(Objects::hashCode));
         System.out.println("Going to " + exit);
         queue.add(new Node(lavaLossMap.get(Point.of(0, 0)), Direction.EAST, 0, null));
@@ -39,7 +39,7 @@ public class Day17 extends AbstractMultiStepDay<Long, Long> {
                     return currentNode.cost();
                 }
                 alreadyVisited.put(currentNode, currentNode.cost());
-//                System.out.print("Running " + currentNode.point() + " - cost = " + currentNode.cost() + " - alreadyVisited = " + alreadyVisited.size() + " queue - " + queue.size() + "  \r");
+                System.out.print("Running " + currentNode.point() + " - cost = " + currentNode.cost() + " - alreadyVisited = " + alreadyVisited.size() + " queue - " + queue.size() + "  \r");
                 currentNode.neighbours(mapWidth, mapHeight, lavaLossMap, step2)
                         .filter(n -> n.neverSeenOrBetterThanPrevious(alreadyVisited))
                         .forEach(queue::add);

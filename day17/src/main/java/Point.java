@@ -37,7 +37,7 @@ public final class Point {
         ).filter(s -> s.pos().isValid(mapWidth, mapHeight));
     }
 
-    public long manhanttanDist(Point p1) {
+    public long manhattanDist(Point p1) {
         return Math.abs(p1.x() - this.x) + Math.abs(p1.y() - this.y);
     }
 
